@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 public class Panel_2d extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	int scale = 50;
 	int x1 = 10;
 	int y1 = 0;
 	int x2 = -10;
 	int y2 = 0;
-	int ss = 5;
 	ArrayList<ArrayList<String>> data;
 	double[] weights;
 
@@ -53,9 +56,6 @@ public class Panel_2d extends JPanel {
 		g.setColor(Color.ORANGE);
 		y1 = (int) (((-weights[1]) * x1 + weights[0]) / weights[2]) * scale;
 		y2 = (int) (((-weights[1]) * x2 + weights[0]) / weights[2]) * scale;
-		// g.drawLine(x1 * scale + this.getWidth() / 2, y1 + this.getHeight() / 2, x2 *
-		// scale + this.getWidth() / 2,
-		// y2 + this.getHeight() / 2);
 
 		g.drawLine(x1 * scale + this.getWidth() / 2, -y1 + this.getHeight() / 2, x2 * scale + this.getWidth() / 2,
 				-y2 + this.getHeight() / 2);

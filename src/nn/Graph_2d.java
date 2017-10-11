@@ -19,6 +19,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	JButton file_bt = new JButton("Choose a file");
 	JButton learning_bt = new JButton("Confirm");
 	private JLabel file_name = new JLabel("File");
@@ -28,8 +32,10 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 	private JLabel weights_label = new JLabel("Weights");
 	private JLabel times_label = new JLabel("Times :");
 	private JLabel after_label = new JLabel("After Training :");
+	private JLabel test_label = new JLabel("Testing :");
 	private JLabel after_weights_label = new JLabel("After Weights :");
 	private JLabel after_recognition_label = new JLabel("After Recognition :");
+	private JLabel test_recognition_label = new JLabel("Test Recognition :");
 	JSlider learning_rate_slider = new JSlider();
 	JSlider recognition_rate_slider = new JSlider();
 	JTextField times_filed = new JTextField();
@@ -67,6 +73,8 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 		after_label.setBounds(800, 350, 150, 50);
 		after_weights_label.setBounds(800, 400, 200, 50);
 		after_recognition_label.setBounds(800, 450, 150, 50);
+		test_label.setBounds(1000, 350, 150, 50);
+		test_recognition_label.setBounds(1000, 400, 150, 50);
 
 		learning_rate_slider.setBounds(793, 150, 200, 50);
 		learning_rate_slider.addChangeListener(this);
@@ -90,6 +98,8 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 		this.add(after_label);
 		this.add(after_weights_label);
 		this.add(after_recognition_label);
+		this.add(test_label);
+		this.add(test_recognition_label);
 		p = new Panel_2d(weights, data);
 		this.add(p).setLocation(0, 0);
 		this.setVisible(true);
@@ -120,6 +130,7 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 			Thread train = new Thread(new Runnable() {
 				double learning_rate_run;
 				double recognition_rate_run;
+				double test_recognition_rate;
 				Perceptron pc;
 
 				// double training_rate_run = 0;
@@ -128,7 +139,7 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 				public void run() {
 					// TODO Auto-generated method stub
 					int num = 0;
-					double w0,w1,w2;
+					double w0,w1,w2,test;
 					setData();
 					learning_bt.setEnabled(false);
 					times_filed.setEditable(false);
@@ -153,6 +164,9 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 					after_weights_label
 							.setText("Weights : (" + w0 + "," + w1 + "," + w2 + ")");
 					after_recognition_label.setText("RecognitionRate : " + pc.current_recognition_rate + " %");
+					test_recognition_rate = pc.testing(weights, data);
+					test = new BigDecimal(test_recognition_rate).setScale(2,RoundingMode.HALF_UP).doubleValue();
+					test_recognition_label.setText("Test Recognition :" + test + "%");
 					learning_bt.setEnabled(true);
 					times_filed.setEditable(true);
 				}
