@@ -140,7 +140,7 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 				public void run() {
 					// TODO Auto-generated method stub
 					int num = 0;
-					double w0,w1,w2,test;
+					double w0, w1, w2, test, current_recognition;
 					setData();
 					learning_bt.setEnabled(false);
 					times_filed.setEditable(false);
@@ -159,14 +159,15 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 							e.printStackTrace();
 						}
 					}
-					w0 = new BigDecimal(weights[0]).setScale(2,RoundingMode.HALF_UP).doubleValue();
-					w1 = new BigDecimal(weights[1]).setScale(2,RoundingMode.HALF_UP).doubleValue();
-					w2 = new BigDecimal(weights[2]).setScale(2,RoundingMode.HALF_UP).doubleValue();
-					after_weights_label
-							.setText("Weights : (" + w0 + "," + w1 + "," + w2 + ")");
-					after_recognition_label.setText("RecognitionRate : " + pc.current_recognition_rate + " %");
+					w0 = new BigDecimal(weights[0]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+					w1 = new BigDecimal(weights[1]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+					w2 = new BigDecimal(weights[2]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+					after_weights_label.setText("Weights : (" + w0 + "," + w1 + "," + w2 + ")");
+					current_recognition = new BigDecimal(pc.current_recognition_rate).setScale(2, RoundingMode.HALF_UP)
+							.doubleValue();
+					after_recognition_label.setText("RecognitionRate : " + current_recognition + " %");
 					test_recognition_rate = pc.testing(weights, data);
-					test = new BigDecimal(test_recognition_rate).setScale(2,RoundingMode.HALF_UP).doubleValue();
+					test = new BigDecimal(test_recognition_rate).setScale(2, RoundingMode.HALF_UP).doubleValue();
 					test_recognition_label.setText("Test Recognition :" + test + "%");
 					learning_bt.setEnabled(true);
 					times_filed.setEditable(true);
@@ -186,9 +187,9 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 		this.times = 50;
 		this.threshold = -1;
 		this.condition = 0.5;
-		//this.weights = weight.clone();
-		this.weights[1] = ((double) (new Random().nextInt(201)-100))/100;
-		this.weights[2] = ((double) (new Random().nextInt(201)-100))/100;
+		// this.weights = weight.clone();
+		this.weights[1] = ((double) (new Random().nextInt(201) - 100)) / 100;
+		this.weights[2] = ((double) (new Random().nextInt(201) - 100)) / 100;
 		weights_label.setText("Synaptic Weights : (" + weights[1] + "," + weights[2] + ")");
 		this.testing_rate = 0;
 		this.data.clear();
