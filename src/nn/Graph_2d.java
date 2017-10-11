@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -185,7 +186,10 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 		this.times = 50;
 		this.threshold = -1;
 		this.condition = 0.5;
-		this.weights = weight.clone();
+		//this.weights = weight.clone();
+		this.weights[1] = ((double) (new Random().nextInt(201)-100))/100;
+		this.weights[2] = ((double) (new Random().nextInt(201)-100))/100;
+		weights_label.setText("Synaptic Weights : (" + weights[1] + "," + weights[2] + ")");
 		this.testing_rate = 0;
 		this.data.clear();
 	}
