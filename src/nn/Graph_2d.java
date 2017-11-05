@@ -103,6 +103,7 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 		this.add(test_recognition_label);
 		p = new Panel_2d(weights, data);
 		this.add(p).setLocation(0, 0);
+		
 		this.setVisible(true);
 
 	}
@@ -188,6 +189,7 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 		this.threshold = -1;
 		this.condition = 0.5;
 		// this.weights = weight.clone();
+		this.weights[0] = -1;
 		this.weights[1] = ((double) (new Random().nextInt(201) - 100)) / 100;
 		this.weights[2] = ((double) (new Random().nextInt(201) - 100)) / 100;
 		weights_label.setText("Synaptic Weights : (" + weights[1] + "," + weights[2] + ")");
@@ -211,6 +213,7 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 		}
 		// System.out.println(weights[1]);
 		System.out.println(data);
+		new RBFN(learning_rate,threshold,weights,data);
 	}
 
 	@Override

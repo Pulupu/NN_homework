@@ -31,24 +31,25 @@ public class Panel_2d extends JPanel {
 	public void paint(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paint(g);
+		g.translate(this.getWidth() / 2, this.getHeight() / 2);
 		g.setColor(Color.WHITE);
-		g.drawLine(0, this.getHeight() / 2, this.getWidth(), this.getHeight() / 2);
-		g.drawLine(this.getWidth() / 2, 0, this.getWidth() / 2, this.getHeight());
+		g.drawLine(0, -500, 0, 500);
+		g.drawLine(-500 , 0, 500, 0);
 
 		for (int i = 0; i < data.size(); i++) {
 
 			if (data.get(i).get(data.get(i).size() - 1).equals("1")) {
 				g.setColor(Color.BLUE);
-				g.fillOval((int) (this.getWidth() / 2 - 3 + (Double.valueOf(data.get(i).get(1)) * scale)),
-						(int) (this.getHeight() / 2 - 3 + -(Double.valueOf(data.get(i).get(2)) * scale)), 6, 6);
-			} else if (data.get(i).get(data.get(i).size() - 1).equals("2")){
+				g.fillOval((int) (-2 + (Double.valueOf(data.get(i).get(1)) * scale)),
+						(int) (-2 + -(Double.valueOf(data.get(i).get(2)) * scale)), 4, 4);
+			} else if (data.get(i).get(data.get(i).size() - 1).equals("2")) {
 				g.setColor(Color.RED);
-				g.fillOval((int) (this.getWidth() / 2 - 3 + (Double.valueOf(data.get(i).get(1)) * scale)),
-						(int) (this.getHeight() / 2 - 3 + -(Double.valueOf(data.get(i).get(2)) * scale)), 6, 6);
-			}else{
+				g.fillOval((int) (-2 + (Double.valueOf(data.get(i).get(1)) * scale)),
+						(int) (-2 + -(Double.valueOf(data.get(i).get(2)) * scale)), 4, 4);
+			} else {
 				g.setColor(Color.YELLOW);
-				g.fillOval((int) (this.getWidth() / 2 - 3 + (Double.valueOf(data.get(i).get(1)) * scale)),
-						(int) (this.getHeight() / 2 - 3 + -(Double.valueOf(data.get(i).get(2)) * scale)), 6, 6);
+				g.fillOval((int) (-2 + (Double.valueOf(data.get(i).get(1)) * scale)),
+						(int) (-2 + -(Double.valueOf(data.get(i).get(2)) * scale)), 4, 4);
 			}
 
 		}
@@ -57,8 +58,7 @@ public class Panel_2d extends JPanel {
 		y1 = (int) (((-weights[1]) * x1 + weights[0]) / weights[2]) * scale;
 		y2 = (int) (((-weights[1]) * x2 + weights[0]) / weights[2]) * scale;
 
-		g.drawLine(x1 * scale + this.getWidth() / 2, -y1 + this.getHeight() / 2, x2 * scale + this.getWidth() / 2,
-				-y2 + this.getHeight() / 2);
+		g.drawLine(x1 * scale, -y1, x2 * scale, -y2);
 
 	}
 
