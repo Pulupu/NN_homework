@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -40,8 +41,11 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 	JSlider learning_rate_slider = new JSlider();
 	JSlider recognition_rate_slider = new JSlider();
 	JTextField times_filed = new JTextField();
+	String[] pattern = { "perceptron", "rbfn" };
+	JComboBox<String> menu = new JComboBox<String>(pattern);
 
 	Panel_2d p;
+	Panel_2d_rbfn p_rbfn;
 	// data
 	int times = 100;
 	double learning_rate = 0.1;
@@ -75,7 +79,7 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 		after_weights_label.setBounds(800, 400, 200, 50);
 		after_recognition_label.setBounds(800, 450, 150, 50);
 		test_label.setBounds(1000, 350, 150, 50);
-		test_recognition_label.setBounds(1000, 400, 150, 50);
+		test_recognition_label.setBounds(1000, 400, 300, 50);
 
 		learning_rate_slider.setBounds(793, 150, 200, 50);
 		learning_rate_slider.addChangeListener(this);
@@ -85,6 +89,7 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 		recognition_rate_slider.addChangeListener(this);
 		recognition_rate_slider.setValue(60);
 		recognition_rate_slider.setName("recognition_rate_slider");
+		menu.setBounds(800, 500, 200, 20);
 		this.add(file_bt);
 		this.add(learning_bt);
 		this.add(file_name);
@@ -101,9 +106,11 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 		this.add(after_recognition_label);
 		this.add(test_label);
 		this.add(test_recognition_label);
+		this.add(menu);
 		p = new Panel_2d(weights, data);
+		p_rbfn = new Panel_2d_rbfn(weights, data);
 		this.add(p).setLocation(0, 0);
-		
+
 		this.setVisible(true);
 
 	}
@@ -179,7 +186,58 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 					recognition_rate_run = recognition_rate;
 				}
 			});
-			train.start();
+			Thread train_rbfn = new Thread(new Runnable() {
+				double learning_rate_run;
+				double recognition_rate_run;
+				//double test_recognition_rate;
+				RBFN rbfn;
+
+				// double training_rate_run = 0;
+				@SuppressWarnings("static-access")
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					int num = 0;
+					double w0, w1, w2, test, current_recognition;
+					setData();
+					learning_bt.setEnabled(false);
+					times_filed.setEditable(false);
+					rbfn = new RBFN(learning_rate_run, recognition_rate_run, weights, data);
+					while (num < times) {						
+						rbfn.training();
+						rbfn.training_recognition();
+						p_rbfn.updateGraphics(weights);
+						num++;
+						if(rbfn.reach_recognition_rate()) {
+							break;
+						}
+						
+					}
+					w0 = new BigDecimal(weights[0]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+					w1 = new BigDecimal(weights[1]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+					w2 = new BigDecimal(weights[2]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+					after_weights_label.setText("Weights : (" + w0 + "," + w1 + "," + w2 + ")");
+					current_recognition = new BigDecimal(rbfn.current_recognition_rate*100).setScale(2, RoundingMode.HALF_UP)
+							.doubleValue();
+					after_recognition_label.setText("RecognitionRate : " + current_recognition + " %");
+					test = rbfn.Eav;
+					test_recognition_label.setText("RMSE :" + test );
+					test_label.setText("");
+					learning_bt.setEnabled(true);
+					times_filed.setEditable(true);
+				}
+
+				public void setData() {
+					learning_rate_run = learning_rate;
+					recognition_rate_run = recognition_rate;
+				}
+			});
+			if (menu.getSelectedItem().toString() == "perceptron") {
+				train.start();
+			} else if (menu.getSelectedItem().toString() == "rbfn") {
+				train_rbfn.start();
+			}
+
 		}
 
 	}
@@ -213,7 +271,6 @@ public class Graph_2d extends JFrame implements ActionListener, ChangeListener {
 		}
 		// System.out.println(weights[1]);
 		System.out.println(data);
-		new RBFN(learning_rate,threshold,weights,data);
 	}
 
 	@Override

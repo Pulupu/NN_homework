@@ -14,23 +14,18 @@ public class RBFN {
 	double[] weights;
 	double learning_rate;
 	double Eav = 0;
+	double current_recognition_rate = 0;
+	double recognition_rate = 0;
 
-	public RBFN(double learning_rate, double threshold, double[] weights, ArrayList<ArrayList<String>> data) {
+	public RBFN(double learning_rate, double recognition_rate, double[] weights, ArrayList<ArrayList<String>> data) {
 		this.data = data;
 		this.weights = weights;
 		this.learning_rate = learning_rate;
+		this.recognition_rate = recognition_rate;
 		k_means(2);
-		int asd = 0;
-		while(asd<1000) {
-			training();
-			training_recognition();
-			asd++;
-		}		
-		System.out.println(this.weights[1]);
-		System.out.println("Eav " + Eav);
 	}
 
-	private void training() {
+	public void training() {
 		
 		for (int i = 0; i < data.size(); i++) {
 			double En = 0;
@@ -50,10 +45,9 @@ public class RBFN {
 		Eav = Eav/data.size();
 	}
 	
-	private void training_recognition() {
+	public void training_recognition() {
 		double correct_amount = 0;
 		double deviation = 0.2;
-		double recognition_rate = 0;
 		for (int i = 0; i < data.size(); i++) {
 			double En = 0;
 			double Fn = 0;
@@ -67,9 +61,10 @@ public class RBFN {
 				correct_amount++;
 			}
 		}
-		recognition_rate = correct_amount/data.size();
-		System.out.println("correct_amount  "+correct_amount);
-		System.out.println("recognition_rate  "+recognition_rate);
+		current_recognition_rate = correct_amount/data.size();
+		//System.out.println("correct_amount  "+correct_amount);
+		//System.out.println("recognition_rate  "+current_recognition_rate);
+		//System.out.println("Eav " + Eav);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -145,5 +140,9 @@ public class RBFN {
 		x[1] = Math.pow(
 				Double.valueOf(data.get(data_num).get(2)) - Double.valueOf(cluster_center.get(cluster_num).get(2)), 2);
 		return Math.exp((-(x[0] + x[1]) / (2 * cluster_sigma.get(cluster_num))));
+	}
+	
+	public boolean reach_recognition_rate() {
+		return (current_recognition_rate*100) >= recognition_rate;
 	}
 }
